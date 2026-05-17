@@ -1,33 +1,27 @@
-// draggableNode.js
+import { draggedNodeTypeRef } from './dndRef';
 
 export const DraggableNode = ({ type, label }) => {
-    const onDragStart = (event, nodeType) => {
-      const appData = { nodeType }
-      event.target.style.cursor = 'grabbing';
-      event.dataTransfer.setData('application/reactflow', JSON.stringify(appData));
-      event.dataTransfer.effectAllowed = 'move';
-    };
-  
-    return (
-      <div
-        className={type}
-        onDragStart={(event) => onDragStart(event, type)}
-        onDragEnd={(event) => (event.target.style.cursor = 'grab')}
-        style={{ 
-          cursor: 'grab', 
-          minWidth: '80px', 
-          height: '60px',
-          display: 'flex', 
-          alignItems: 'center', 
-          borderRadius: '8px',
-          backgroundColor: '#1C2536',
-          justifyContent: 'center', 
-          flexDirection: 'column'
-        }} 
-        draggable
-      >
-          <span style={{ color: '#fff' }}>{label}</span>
-      </div>
-    );
+  const onDragStart = (event, nodeType) => {
+    draggedNodeTypeRef.current = nodeType;
+    event.dataTransfer.setData('application/reactflow', JSON.stringify({ nodeType }));
+    event.dataTransfer.setData('text/plain', nodeType);
+    event.dataTransfer.effectAllowed = 'move';
+    event.target.style.cursor = 'grabbing';
   };
-  
+
+  const onDragEnd = (event) => {
+    event.target.style.cursor = 'grab';
+    draggedNodeTypeRef.current = null;
+  };
+
+  return (
+    <div
+      className={`draggable-node ${type}`}
+      onDragStart={(event) => onDragStart(event, type)}
+      onDragEnd={onDragEnd}
+      draggable
+    >
+      {label}
+    </div>
+  );
+};

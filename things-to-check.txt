@@ -1,0 +1,10 @@
+Understand the architecture at a high level
+Learn how the DAG logic works
+Be able to explain the backend integration
+Prepare for backend/system-design rounds
+
+understand component flow,
+understand DAG logic,
+understand state management,
+know how dynamic handles work,
+be able to modify features manually.
